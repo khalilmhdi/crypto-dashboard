@@ -1,0 +1,68 @@
+{
+  "calculator": {
+    "entry_price": "",
+    "exit_price": "",
+    "position_size": "100",
+    "leverage": "10",
+    "last_calculations": []
+  },
+  "trading_notes": "hello everyone ",
+  "chart_settings": {
+    "chart1": {
+      "symbol": "ETHUSDT.P",
+      "interval": "5"
+    },
+    "chart2": {
+      "symbol": "TUTUSDT",
+      "interval": "15"
+    },
+    "chart3": {
+      "symbol": "BTCUSDT.P",
+      "interval": "1"
+    },
+    "chart4": {
+      "symbol": "BTCUSDT.P",
+      "interval": "240"
+    }
+  },
+  "trade_journal": [],
+  "preferences": {
+    "theme": "dark",
+    "default_leverage": "10",
+    "default_position_size": "100"
+  },
+  "created_at": "2025-10-17T22:07:08.075122",
+  "last_login": "2025-10-17T23:36:40.230796",
+  "last_updated": "2025-10-17T23:36:40.230813",
+  "layout_saves": {
+    "My Layout": {
+      "chart_settings": {
+        "chart1": {
+          "symbol": "ETHUSDT.P",
+          "interval": "5"
+        },
+        "chart2": {
+          "symbol": "TUTUSDT",
+          "interval": "15"
+        },
+        "chart3": {
+          "symbol": "BTCUSDT.P",
+          "interval": "1"
+        },
+        "chart4": {
+          "symbol": "BTCUSDT.P",
+          "interval": "240"
+        }
+      },
+      "chart_states": {},
+      "chart_symbols": {
+        "chart1": "ETHUSDT.P",
+        "chart2": "TUTUSDT",
+        "chart3": "BTCUSDT.P",
+        "chart4": "BTCUSDT.P"
+      },
+      "saved_at": "2025-10-17T23:36:28.995808"
+    }
+  },
+  "chart_states": {}
+}

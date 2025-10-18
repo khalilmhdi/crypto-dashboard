@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Order Flow Dashboard</title>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .chart {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .chart img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .positive { color: #4CAF50; }
+        .negative { color: #f44336; }
+        .status {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Live Crypto Order Flow Dashboard</h1>
+            <p>Real-time Bid/Ask Analysis with Order Flow Candles</p>
+        </div>
+
+        <div class="status" id="status">
+            Connecting to live data...
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div>Current Time</div>
+                <div class="stat-value" id="currentTime">--:--:--</div>
+                <div>Last Update</div>
+            </div>
+            <div class="stat-card">
+                <div>Bid Volume</div>
+                <div class="stat-value" id="bidVolume">0</div>
+                <div>Buy Orders</div>
+            </div>
+            <div class="stat-card">
+                <div>Ask Volume</div>
+                <div class="stat-value" id="askVolume">0</div>
+                <div>Sell Orders</div>
+            </div>
+            <div class="stat-card">
+                <div>Order Imbalance</div>
+                <div class="stat-value" id="imbalance">0</div>
+                <div>Bid - Ask</div>
+            </div>
+            <div class="stat-card">
+                <div>Spread</div>
+                <div class="stat-value" id="spread">0.00</div>
+                <div>Best Ask - Bid</div>
+            </div>
+            <div class="stat-card">
+                <div>Total Candles</div>
+                <div class="stat-value" id="totalCandles">0</div>
+                <div>Collected</div>
+            </div>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart">
+                <h3>📊 Live Order Flow Analysis</h3>
+                <div id="liveChart">
+                    <img id="liveChartImg" src="" alt="Live Chart Loading...">
+                </div>
+            </div>
+            <div class="chart">
+                <h3>🕯️ Order Flow Candles</h3>
+                <div id="candleChart">
+                    <img id="candleChartImg" src="" alt="Candle Chart Loading...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+
+        socket.on('connect', function() {
+            document.getElementById('status').innerHTML =
+                '<span style="color: #4CAF50;">✅ Connected to Live Data Feed</span>';
+        });
+
+        socket.on('disconnect', function() {
+            document.getElementById('status').innerHTML =
+                '<span style="color: #f44336;">❌ Disconnected from Data Feed</span>';
+        });
+
+        socket.on('data_update', function(data) {
+            document.getElementById('currentTime').textContent = data.timestamp;
+            document.getElementById('bidVolume').textContent = data.bid_volume.toFixed(1);
+            document.getElementById('askVolume').textContent = data.ask_volume.toFixed(1);
+
+            const imbalanceElem = document.getElementById('imbalance');
+            imbalanceElem.textContent = data.imbalance.toFixed(1);
+            imbalanceElem.className = 'stat-value ' + (data.imbalance > 0 ? 'positive' : 'negative');
+
+            document.getElementById('spread').textContent = data.spread.toFixed(4);
+            document.getElementById('totalCandles').textContent = data.total_candles;
+        });
+
+        socket.on('chart_update', function(data) {
+            document.getElementById('liveChartImg').src = 'data:image/png;base64,' + data.live_chart;
+            document.getElementById('candleChartImg').src = 'data:image/png;base64,' + data.candle_chart;
+        });
+
+        // Update clock every second
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent =
+                now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
